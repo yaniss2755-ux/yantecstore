@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YanTechStore - Inscription</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="../style/formulaires.css">
+</head>
+<body>
+    <nav>
+        <a href="../index.html" class="logo-img-link">
+            <img src="../images/logo-yantechstore.png" alt="YanTechStore" class="logo-img">
+        </a>
+        <button class="menu-toggle" onclick="document.getElementById('menuNav').classList.toggle('ouvert')">
+            <span></span><span></span><span></span>
+        </button>
+        <ul id="menuNav">
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="produits.html">Produits</a></li>
+            <li><a href="panier.html" class="panier-btn">🛒 Panier <span id="compteurPanier">0</span></a></li>
+            <li><a href="connexion.html" id="lienConnexion">Connexion</a></li>
+            <li><a href="inscription.html" class="actif">Inscription</a></li>
+        </ul>
+    </nav>
+<!-- ====== LIGNE NÉON DÉFILANTE ====== -->
+    <div class="neon-line"></div>
+    <div class="form-page">
+        <div class="form-card">
+            <h2>📝 Créer un compte</h2>
+            <p class="form-sous-titre">Rejoignez YanTechStore</p>
+
+            <div id="messageErreur" style="display:none; background:rgba(255,0,0,0.08); border:1px solid rgba(255,0,0,0.2); color:#ff4444; padding:10px; border-radius:10px; margin-bottom:15px; font-size:14px; text-align:center;"></div>
+
+            <div class="champ-row">
+                <div class="champ">
+                    <label>Prénom</label>
+                    <input type="text" id="prenom">
+                    <span class="erreur" id="errPrenom"></span>
+                </div>
+                <div class="champ">
+                    <label>Nom</label>
+                    <input type="text" id="nom">
+                    <span class="erreur" id="errNom"></span>
+                </div>
+            </div>
+
+            <div class="champ">
+                <label>Adresse email</label>
+                <input type="email" id="email" placeholder="exemple@mail.com">
+                <span class="erreur" id="errEmail"></span>
+            </div>
+
+            <div class="champ">
+                <label>Mot de passe</label>
+                <input type="password" id="motDePasse" placeholder="Min. 8 caractères">
+                <span class="erreur" id="errMDP"></span>
+            </div>
+
+            <div class="champ">
+                <label>Confirmer le mot de passe</label>
+                <input type="password" id="confirmation" placeholder="Répéter le mot de passe">
+                <span class="erreur" id="errConf"></span>
+            </div>
+
+            <button class="btn-bleu btn-form" onclick="sInscrire()">Créer mon compte</button>
+
+            <p class="form-lien">Déjà un compte ? <a href="connexion.html">Se connecter</a></p>
+        </div>
+    </div>
+
+    <script src="../javascript/produits.js"></script>
+    <script src="../javascript/auth.js"></script>
+    <script src="../javascript/panier.js"></script>
+    <script src="../javascript/particles.js"></script>
+    <script>
+        window.onload = function() {
+            majCompteurPanier();
+        };
+
+        var regexEmail = /^[a-zA-Z0-9._\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+        var regexNom   = /^[A-Za-zÀ-ÿ\s'\-]{2,50}$/;
+        var regexMDP   = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
+
+        function sInscrire() {
+            var prenom = document.getElementById("prenom").value;
+            var nom    = document.getElementById("nom").value;
+            var email  = document.getElementById("email").value;
+            var mdp    = document.getElementById("motDePasse").value;
+            var conf   = document.getElementById("confirmation").value;
+            var ok     = true;
+
+            document.getElementById("errPrenom").textContent = "";
+            document.getElementById("errNom").textContent    = "";
+            document.getElementById("errEmail").textContent  = "";
+            document.getElementById("errMDP").textContent    = "";
+            document.getElementById("errConf").textContent   = "";
+
+            if (!regexNom.test(prenom)) {
+                document.getElementById("errPrenom").textContent = "Prénom invalide (2-50 lettres).";
+                ok = false;
+            }
+            if (!regexNom.test(nom)) {
+                document.getElementById("errNom").textContent = "Nom invalide (2-50 lettres).";
+                ok = false;
+            }
+            if (!regexEmail.test(email)) {
+                document.getElementById("errEmail").textContent = "Email invalide.";
+                ok = false;
+            }
+            if (!regexMDP.test(mdp)) {
+                document.getElementById("errMDP").textContent = "Min. 8 car., 1 majuscule, 1 chiffre, 1 symbole.";
+                ok = false;
+            }
+            if (mdp != conf) {
+                document.getElementById("errConf").textContent = "Les mots de passe ne correspondent pas.";
+                ok = false;
+            }
+
+            if (!ok) return;
+
+            inscrire(prenom, email, mdp);
+            alert("Compte créé avec succès !");
+            window.location.href = "connexion.html";
+        }
+    </script>
+</body>
+</html>

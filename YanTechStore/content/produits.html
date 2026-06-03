@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YanTechStore - Produits</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="../style/produits.css">
+</head>
+<body>
+
+    <nav>
+        <a href="../index.html" class="logo-img-link">
+            <img src="../images/logo-yantechstore.png" alt="YanTechStore" class="logo-img">
+        </a>
+
+        <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
+
+        <ul id="menuNav">
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="produits.html" class="actif">Produits</a></li>
+            <li><a href="commande.html">Commande</a></li>
+            <li>
+                <a href="panier.html" class="panier-btn">
+                    🛒 Panier
+                    <span id="compteurPanier">0</span>
+                </a>
+            </li>
+            <li><span id="nomUser"></span></li>
+            <li><a href="connexion.html" id="lienConnexion">Connexion</a></li>
+            <li><button onclick="deconnecter()" id="lienDeconnexion">Déconnexion</button></li>
+        </ul>
+    </nav>
+<!-- ====== LIGNE NÉON DÉFILANTE ====== -->
+    <div class="neon-line"></div>
+
+    <div class="contenu">
+        <h1 class="titre-page">Nos Produits</h1>
+
+        <!-- barre de recherche et filtres -->
+        <div class="barre-controles">
+            <input type="text" id="recherche" placeholder="🔍 Rechercher un produit..."
+                   oninput="filtrerProduits()">
+
+            <div class="filtres">
+                <button class="btn-filtre actif" onclick="filtrerParCategorie('tous', this)">Tous</button>
+                <button class="btn-filtre" onclick="filtrerParCategorie('laptops', this)">💻 Laptops</button>
+                <button class="btn-filtre" onclick="filtrerParCategorie('smartphones', this)">📱 Smartphones</button>
+                <button class="btn-filtre" onclick="filtrerParCategorie('accessoires', this)">🖱️ Accessoires</button>
+                <button class="btn-filtre" onclick="filtrerParCategorie('audio', this)">🎧 Audio</button>
+                <button class="btn-filtre" onclick="filtrerParCategorie('stockage', this)">💾 Stockage</button>
+            </div>
+        </div>
+
+        <!-- nombre de resultats -->
+        <p id="nbResultats" style="color:#777; font-size:14px; margin-bottom:15px;"></p>
+
+        <!-- grille des produits -->
+        <div class="produits-grille" id="grilleProduits">
+            <!-- rempli par javascript -->
+        </div>
+
+        <!-- modal pour voir les details d'un produit -->
+        <div id="modal" class="modal" style="display:none;" onclick="fermerModal(event)">
+            <div class="modal-contenu">
+                <button class="modal-fermer" onclick="fermerModal()">✕</button>
+                <img id="modalImage" src="" alt="">
+                <div class="modal-info">
+                    <span id="modalCategorie" class="badge-categorie"></span>
+                    <h2 id="modalNom"></h2>
+                    <p id="modalDescription"></p>
+                    <div class="modal-bas">
+                        <span id="modalPrix" class="prix-grand"></span>
+                        <button class="btn-bleu" id="modalBtnPanier">🛒 Ajouter au panier</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 YanTechStore — Tous droits réservés</p>
+    </footer>
+
+    <script src="../javascript/produits.js"></script>
+    <script src="../javascript/auth.js"></script>
+    <script src="../javascript/panier.js"></script>
+    <script>
+        var categorieActive = "tous";
+
+        window.onload = function() {
+            majMenu();
+            majCompteurPanier();
+            // verifier si une categorie est passee dans l'URL
+            var urlParams = new URLSearchParams(window.location.search);
+            var cat = urlParams.get("categorie");
+            if (cat) {
+                // activer le bon bouton
+                var boutons = document.querySelectorAll(".btn-filtre");
+                boutons.forEach(function(btn) {
+                    btn.classList.remove("actif");
+                    if (btn.getAttribute("onclick").includes(cat)) {
+                        btn.classList.add("actif");
+                        categorieActive = cat;
+                    }
+                });
+            }
+            afficherProduits(listeProduits);
+            filtrerProduits();
+        };
+
+        // afficher les produits dans la grille
+        function afficherProduits(produits) {
+            var container = document.getElementById("grilleProduits");
+            var nb = document.getElementById("nbResultats");
+
+            nb.textContent = produits.length + " produit(s) trouvé(s)";
+
+            if (produits.length == 0) {
+                container.innerHTML = '<p style="text-align:center; color:#999; padding:40px;">Aucun produit trouvé.</p>';
+                return;
+            }
+
+            var html = "";
+            for (var i = 0; i < produits.length; i++) {
+                var p = produits[i];
+                html += '<div class="produit-carte" onclick="ouvrirModal(' + p.id + ')">';
+                html += '  <img src="' + p.image + '" alt="' + p.nom + '">';
+                html += '  <div class="produit-info">';
+                html += '    <span class="badge-categorie">' + p.categorie + '</span>';
+                html += '    <h3>' + p.nom + '</h3>';
+                html += '    <p>' + p.description + '</p>';
+                html += '    <div class="produit-bas">';
+                html += '      <span class="prix">' + p.prix.toLocaleString('fr-FR') + ' DZD</span>';
+                html += '      <button class="btn-bleu" onclick="event.stopPropagation(); ajouterAuPanier(' + p.id + ')">+ Panier</button>';
+                html += '    </div>';
+                html += '  </div>';
+                html += '</div>';
+            }
+            container.innerHTML = html;
+        }
+
+        // filtrer par categorie ET par recherche
+        function filtrerProduits() {
+            var recherche = document.getElementById("recherche").value.toLowerCase();
+            var resultat = [];
+
+            for (var i = 0; i < listeProduits.length; i++) {
+                var p = listeProduits[i];
+                // filtre categorie
+                var okCategorie = (categorieActive == "tous" || p.categorie == categorieActive);
+                // filtre recherche
+                var okRecherche = (p.nom.toLowerCase().includes(recherche) ||
+                                   p.description.toLowerCase().includes(recherche) ||
+                                   p.categorie.toLowerCase().includes(recherche));
+
+                if (okCategorie && okRecherche) {
+                    resultat.push(p);
+                }
+            }
+            afficherProduits(resultat);
+        }
+
+        // filtrer par categorie
+        function filtrerParCategorie(cat, bouton) {
+            categorieActive = cat;
+            // mettre a jour les boutons
+            var boutons = document.querySelectorAll(".btn-filtre");
+            boutons.forEach(function(b) { b.classList.remove("actif"); });
+            bouton.classList.add("actif");
+            filtrerProduits();
+        }
+
+        // ouvrir la modal de detail
+        function ouvrirModal(id) {
+            var produit = null;
+            for (var i = 0; i < listeProduits.length; i++) {
+                if (listeProduits[i].id == id) {
+                    produit = listeProduits[i];
+                    break;
+                }
+            }
+            if (!produit) return;
+
+            document.getElementById("modalImage").src = produit.image;
+            document.getElementById("modalNom").textContent = produit.nom;
+            document.getElementById("modalDescription").textContent = produit.description;
+            document.getElementById("modalPrix").textContent = produit.prix.toLocaleString('fr-FR') + " DZD";
+            document.getElementById("modalCategorie").textContent = produit.categorie;
+            document.getElementById("modalBtnPanier").onclick = function() {
+                ajouterAuPanier(id);
+                fermerModal();
+            };
+
+            document.getElementById("modal").style.display = "flex";
+            document.body.style.overflow = "hidden";
+        }
+
+        // fermer la modal
+        function fermerModal(event) {
+            if (!event || event.target == document.getElementById("modal")) {
+                document.getElementById("modal").style.display = "none";
+                document.body.style.overflow = "";
+            }
+        }
+
+        // fermer modal avec Escape
+        document.addEventListener("keydown", function(e) {
+            if (e.key == "Escape") fermerModal();
+        });
+
+        function toggleMenu() {
+            document.getElementById("menuNav").classList.toggle("ouvert");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+/* ====== PANIER HIGH-TECH ====== */
+
+.panier-vide {
+    text-align: center;
+    padding: 80px 20px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.panier-vide p {
+    font-size: 22px;
+    margin-bottom: 25px;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
+}
+
+.panier-article {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 243, 255, 0.1);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    transition: all 0.3s ease;
+}
+
+.panier-article:hover {
+    border-color: #00f0ff;
+    box-shadow: 0 0 40px rgba(0, 243, 255, 0.05);
+}
+
+.panier-article img {
+    width: 90px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 10px;
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 243, 255, 0.1);
+}
+
+.article-info {
+    flex: 1;
+}
+
+.article-info h3 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 17px;
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+.prix-unit {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+}
+
+.panier-total {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 243, 255, 0.1);
+    border-radius: 14px;
+    padding: 25px;
+    margin-top: 25px;
+    max-width: 400px;
+    margin-left: auto;
+}
+
+.total-ligne {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.7);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.total-final {
+    font-weight: bold;
+    font-size: 20px;
+    color: #00f0ff;
+    border-top: 2px solid #00f0ff !important;
+    border-bottom: none !important;
+    margin-top: 5px;
+    padding-top: 14px !important;
+    text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+}
+
+.btn-commander {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 18px;
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 50px;
+    width: 100%;
+}
+
+.btn-supprimer {
+    background: rgba(255, 0, 0, 0.05);
+    border: 1px solid rgba(255, 0, 0, 0.2);
+    cursor: pointer;
+    font-size: 20px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: #ff4444;
+    transition: all 0.3s ease;
+}
+
+.btn-supprimer:hover {
+    background: rgba(255, 0, 0, 0.15);
+    box-shadow: 0 0 25px rgba(255, 0, 0, 0.2);
+}

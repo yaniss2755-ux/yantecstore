@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YanTechStore - Accueil</title>
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Ajout pour l'indentation de "Store" sous "YanTech" */
+        .brand-group {
+            display: inline-block;
+            text-align: left;
+        }
+        .brand-yan,
+        .brand-store {
+            display: block;
+        }
+        .brand-store {
+            margin-left: 35px;  /* Ajustez cette valeur pour l'indentation souhaitée */
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo-img-link">
+            <img src="images/logo-yantechstore.png" alt="YanTechStore" class="logo-img">
+        </a> 
+        <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
+        <ul id="menuNav">
+            <li><a href="index.html" class="actif">Accueil</a></li>
+            <li><a href="content/produits.html">Produits</a></li>
+            <li><a href="content/commande.html">Commande</a></li>
+            <li>
+                <a href="content/panier.html" class="panier-btn">
+                    🛒 Panier
+                    <span id="compteurPanier">0</span>
+                </a>
+            </li>
+            <li><span id="nomUser"></span></li>
+            <li><a href="content/connexion.html" id="lienConnexion">Connexion</a></li>
+            <li><button onclick="deconnecter()" id="lienDeconnexion">Déconnexion</button></li>
+        </ul>
+    </nav>
+
+    <!-- ====== LIGNE NÉON DÉFILANTE ====== -->
+    <div class="neon-line"></div>
+
+    <section class="hero">
+        <div class="hero-texte">
+            <h1>
+                Bienvenue sur<br>
+                <div class="brand-group">
+                    <span class="brand-yan">YanTech</span>
+                    <span class="brand-store">Store</span>
+                </div>
+            </h1>
+            <p>Votre boutique en ligne de produits informatiques en Algérie.<br>
+               Laptops, composants, accessoires et plus encore.</p>
+            <div class="hero-boutons">
+                <button class="btn-bleu" onclick="ouvrirModalContact()">Contactez-nous</button>
+                <a href="content/inscription.html" class="btn-bleu">Créer un compte</a>
+            </div>
+        </div>
+
+        <div class="hero-carrousel">
+            <div class="carrousel-piste" id="carrouselPiste">
+                <img src="images/carousel1.jpg" alt="Carte mère MSI" class="carrousel-img">
+                <img src="images/carousel2.jpg" alt="Cartes mères gaming" class="carrousel-img">
+                <img src="images/carousel3.jpg" alt="PC Gaming" class="carrousel-img">
+                <img src="images/carousel4.jpg" alt="Systèmes d'exploitation" class="carrousel-img">
+                <img src="images/carousel5.jpg" alt="Souris SteelSeries" class="carrousel-img">
+                <img src="images/carousel6.jpg" alt="Windows 11" class="carrousel-img">
+            </div>
+            <button class="carrousel-fleche gauche" onclick="deplacerCarrousel(-1)">&#8249;</button>
+            <button class="carrousel-fleche droite" onclick="deplacerCarrousel(1)">&#8250;</button>
+            <div class="carrousel-points" id="carrouselPoints"></div>
+        </div>
+    </section>
+
+    <div class="contenu">
+        <section class="categories">
+            <h2>Nos catégories</h2>
+            <div class="cat-grille">
+                <a href="content/produits.html?categorie=laptops" class="cat-carte">
+                    <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=300&q=80" alt="Laptops">
+                    <span>💻 Laptops</span>
+                </a>
+                <a href="content/produits.html?categorie=smartphones" class="cat-carte">
+                    <img src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=300&q=80" alt="Smartphones">
+                    <span>📱 Smartphones</span>
+                </a>
+                <a href="content/produits.html?categorie=accessoires" class="cat-carte">
+                    <img src="https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=300&q=80" alt="Accessoires">
+                    <span>🖱️ Accessoires</span>
+                </a>
+                <a href="content/produits.html?categorie=audio" class="cat-carte">
+                    <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?w=300&q=80" alt="Audio">
+                    <span>🎧 Audio</span>
+                </a>
+                <a href="content/produits.html?categorie=stockage" class="cat-carte">
+                    <img src="https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=300&q=80" alt="Stockage">
+                    <span>💾 Stockage</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="vedette">
+            <h2>Produits populaires</h2>
+            <div class="produits-grille" id="produitsVedette"></div>
+            <div style="text-align:center; margin-top:25px;">
+                <a href="content/produits.html" class="btn-bleu">Voir tous les produits</a>
+            </div>
+        </section>
+
+        <section class="avantages">
+            <div class="avantage-item">
+                <span class="icone">🚚</span>
+                <h3>Livraison rapide</h3>
+                <p>Livraison dans toute l'Algérie sous 48h</p>
+            </div>
+            <div class="avantage-item">
+                <span class="icone">✅</span>
+                <h3>Produits garantis</h3>
+                <p>Tous nos produits sont originaux avec garantie</p>
+            </div>
+            <div class="avantage-item">
+                <span class="icone">💳</span>
+                <h3>Paiement à la livraison</h3>
+                <p>Possibilité de payer à la réception de votre commande</p>
+            </div>
+            <div class="avantage-item">
+                <span class="icone">🔧</span>
+                <h3>Support technique</h3>
+                <p>Notre équipe est disponible pour vous aider</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>© 2025 YanTechStore — Tous droits réservés</p>
+        <p style="margin-top:8px;">
+            <a href="content/produits.html">Produits</a> |
+            <a href="content/connexion.html">Connexion</a> |
+            <a href="content/inscription.html">Inscription</a>
+        </p>
+    </footer>
+
+    <!-- ====== MODALE DE CONTACT ====== -->
+    <div id="modalContact" class="modal-contact-fond">
+        <div class="modal-contact-boite">
+            <button class="modal-fermer-btn" onclick="fermerModalContact()">✕</button>
+            <h2 class="modal-titre">Contactez-nous</h2>
+            <p class="modal-sous-titre">YanTechStore — Boutique en ligne</p>
+            <div class="modal-infos">
+                <div class="modal-info-ligne">
+                    <span class="modal-icone">📞</span>
+                    <div>
+                        <strong>Téléphone</strong>
+                        <p>+213 (0) 26 21 58 20</p>
+                    </div>
+                </div>
+                <div class="modal-info-ligne">
+                    <span class="modal-icone">✉️</span>
+                    <div>
+                        <strong>Email</strong>
+                        <p>contact@yantechstore.dz</p>
+                    </div>
+                </div>
+                <div class="modal-info-ligne">
+                    <span class="modal-icone">🕐</span>
+                    <div>
+                        <strong>Horaires</strong>
+                        <p>Dim – Jeu : 08h00 – 17h00</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-bas">
+                <button class="btn-bleu" onclick="fermerModalContact()">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SCRIPTS ====== -->
+    <script src="javascript/produits.js"></script>
+    <script src="javascript/auth.js"></script>
+    <script src="javascript/panier.js"></script>
+    <script src="javascript/particles.js"></script>
+    <script src="javascript/parallax.js"></script>
+    <script src="javascript/circuit.js"></script>
+    <script>
+        // ====== MENU MOBILE ======
+        function toggleMenu() {
+            document.getElementById('menuNav').classList.toggle('ouvert');
+        }
+
+        // ====== PRODUITS VEDETTE ======
+        window.onload = function() {
+            majMenu();
+            majCompteurPanier();
+            
+            // Afficher les 4 premiers produits
+            var container = document.getElementById("produitsVedette");
+            var afficher = listeProduits.slice(0, 4);
+            var html = "";
+            for (var i = 0; i < afficher.length; i++) {
+                var p = afficher[i];
+                html += '<div class="produit-carte">';
+                html += '  <img src="' + p.image + '" alt="' + p.nom + '">';
+                html += '  <div class="produit-info">';
+                html += '    <h3>' + p.nom + '</h3>';
+                html += '    <p>' + p.description + '</p>';
+                html += '    <div class="produit-bas">';
+                html += '      <span class="prix">' + p.prix.toLocaleString('fr-FR') + ' DZD</span>';
+                html += '      <button class="btn-bleu" onclick="ajouterAuPanier(' + p.id + ')">+ Panier</button>';
+                html += '    </div>';
+                html += '  </div>';
+                html += '</div>';
+            }
+            container.innerHTML = html;
+            
+            // Initialiser le carrousel
+            initCarrousel();
+        };
+
+        // ====== CARROUSEL ======
+        var indexActuel = 0;
+        var totalImages = 6;
+        var intervalCarrousel;
+
+        function initCarrousel() {
+            // Créer les points de navigation
+            var points = document.getElementById("carrouselPoints");
+            var html = "";
+            for (var i = 0; i < totalImages; i++) {
+                html += '<span class="point ' + (i === 0 ? 'actif' : '') + '" onclick="allerA(' + i + ')"></span>';
+            }
+            points.innerHTML = html;
+            
+            // Position initiale
+            appliquerCarrousel();
+            
+            // Démarrage automatique
+            if (intervalCarrousel) clearInterval(intervalCarrousel);
+            intervalCarrousel = setInterval(function() {
+                deplacerCarrousel(1);
+            }, 3000);
+        }
+
+        function deplacerCarrousel(direction) {
+            indexActuel += direction;
+            if (indexActuel >= totalImages) indexActuel = 0;
+            if (indexActuel < 0) indexActuel = totalImages - 1;
+            appliquerCarrousel();
+        }
+
+        function allerA(index) {
+            indexActuel = index;
+            appliquerCarrousel();
+            clearInterval(intervalCarrousel);
+            intervalCarrousel = setInterval(function() {
+                deplacerCarrousel(1);
+            }, 3000);
+        }
+
+        function appliquerCarrousel() {
+            var piste = document.getElementById("carrouselPiste");
+            piste.style.transform = "translateX(-" + (indexActuel * 100) + "%)";
+            
+            var points = document.querySelectorAll(".point");
+            for (var i = 0; i < points.length; i++) {
+                points[i].classList.remove("actif");
+            }
+            if (points[indexActuel]) {
+                points[indexActuel].classList.add("actif");
+            }
+        }
+
+        // ====== MODALE DE CONTACT ======
+        function ouvrirModalContact() {
+            var modal = document.getElementById("modalContact");
+            if (modal) {
+                modal.style.display = "flex";
+                document.body.style.overflow = "hidden";
+            }
+        }
+
+        function fermerModalContact() {
+            var modal = document.getElementById("modalContact");
+            if (modal) {
+                modal.style.display = "none";
+                document.body.style.overflow = "";
+            }
+        }
+
+        // Fermer la modale avec la touche Echap
+        document.addEventListener("keydown", function(e) {
+            if (e.key === "Escape") {
+                fermerModalContact();
+            }
+        });
+
+        // Fermer la modale en cliquant sur le fond
+        document.getElementById("modalContact").addEventListener("click", function(e) {
+            if (e.target === this) {
+                fermerModalContact();
+            }
+        });
+    </script>
+</body>
+</html>

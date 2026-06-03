@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YanTechStore - Mon Panier</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="../style/panier.css">
+</head>
+<body>
+    <nav>
+        <a href="../index.html" class="logo-img-link">
+            <img src="../images/logo-yantechstore.png" alt="YanTechStore" class="logo-img">
+        </a>
+        <button class="menu-toggle" onclick="document.getElementById('menuNav').classList.toggle('ouvert')">
+            <span></span><span></span><span></span>
+        </button>
+        <ul id="menuNav">
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="produits.html">Produits</a></li>
+            <li><a href="commande.html">Commande</a></li>
+            <li><a href="panier.html" class="panier-btn actif">🛒 Panier <span id="compteurPanier">0</span></a></li>
+            <li><span id="nomUser"></span></li>
+            <li><a href="connexion.html" id="lienConnexion">Connexion</a></li>
+            <li><button onclick="deconnecter()" id="lienDeconnexion">Déconnexion</button></li>
+        </ul>
+    </nav>
+<!-- ====== LIGNE NÉON DÉFILANTE ====== -->
+    <div class="neon-line"></div>
+    <div class="contenu">
+        <h1 class="titre-page">🛒 Mon Panier</h1>
+        <div id="panierVide" style="display:none;" class="panier-vide">
+            <p>😕 Votre panier est vide.</p>
+            <a href="produits.html" class="btn-bleu">Voir les produits</a>
+        </div>
+        <div id="panierContenu">
+            <div id="listePanier"></div>
+            <div class="panier-total">
+                <div class="total-ligne"><span>Sous-total :</span><span id="sousTotal">0 DZD</span></div>
+                <div class="total-ligne"><span>Livraison :</span><span id="fraisLivraison">500 DZD</span></div>
+                <div class="total-ligne total-final"><span>Total :</span><span id="totalFinal">500 DZD</span></div>
+                <a href="commande.html" class="btn-bleu btn-commander">Passer la commande →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer><p>© 2025 YanTechStore — Tous droits réservés</p></footer>
+
+    <script src="../javascript/produits.js"></script>
+    <script src="../javascript/auth.js"></script>
+    <script src="../javascript/panier.js"></script>
+    <script src="../javascript/particles.js"></script>
+    <script>
+        window.onload = function() {
+            majMenu();
+            majCompteurPanier();
+            afficherPanier();
+        };
+
+        function afficherPanier() {
+            var panier  = JSON.parse(localStorage.getItem("panier")) || [];
+            var liste   = document.getElementById("listePanier");
+            var vide    = document.getElementById("panierVide");
+            var contenu = document.getElementById("panierContenu");
+
+            if (panier.length == 0) {
+                vide.style.display    = "block";
+                contenu.style.display = "none";
+                return;
+            }
+
+            vide.style.display    = "none";
+            contenu.style.display = "block";
+
+            var html = "";
+            for (var i = 0; i < panier.length; i++) {
+                html += '<div class="panier-article">';
+                html += '<img src="' + panier[i].image + '" alt="' + panier[i].nom + '">';
+                html += '<div class="article-info">';
+                html += '<h3>' + panier[i].nom + '</h3>';
+                html += '<span class="prix-unit">' + panier[i].prix.toLocaleString('fr-FR') + ' DZD</span>';
+                html += '</div>';
+                html += '<div style="margin-left:auto;">';
+                html += '<span style="font-weight:bold;color:#00f0ff;">' + (panier[i].prix * panier[i].quantite).toLocaleString('fr-FR') + ' DZD</span>';
+                html += '</div>';
+                html += '<button class="btn-supprimer" onclick="supprimerDuPanier(' + panier[i].id + ')">🗑️</button>';
+                html += '</div>';
+            }
+            liste.innerHTML = html;
+
+            var sous      = getTotal();
+            var livraison = sous >= 10000 ? 0 : 500;
+            document.getElementById("sousTotal").textContent     = sous.toLocaleString('fr-FR') + " DZD";
+            document.getElementById("fraisLivraison").textContent = livraison == 0 ? "Gratuit 🎉" : "500 DZD";
+            document.getElementById("totalFinal").textContent    = (sous + livraison).toLocaleString('fr-FR') + " DZD";
+        }
+    </script>
+</body>
+</html>
