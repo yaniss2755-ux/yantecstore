@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YanTechStore - Connexion</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="../style/formulaires.css">
+</head>
+<body>
+    <nav>
+        <a href="../index.html" class="logo-img-link">
+            <img src="../images/logo-yantechstore.png" alt="YanTechStore" class="logo-img">
+        </a>
+        <button class="menu-toggle" onclick="document.getElementById('menuNav').classList.toggle('ouvert')">
+            <span></span><span></span><span></span>
+        </button>
+        <ul id="menuNav">
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="produits.html">Produits</a></li>
+            <li><a href="panier.html" class="panier-btn">🛒 Panier <span id="compteurPanier">0</span></a></li>
+            <li><a href="connexion.html" class="actif" id="lienConnexion">Connexion</a></li>
+            <li><a href="inscription.html">Inscription</a></li>
+        </ul>
+    </nav>
+<!-- ====== LIGNE NÉON DÉFILANTE ====== -->
+    <div class="neon-line"></div>
+    <div class="form-page">
+        <div class="form-card">
+            <h2>🔐 Connexion</h2>
+            <p class="form-sous-titre">Accédez à votre compte YanTechStore</p>
+
+            <div id="messageErreur" style="display:none; background:rgba(255,0,0,0.08); border:1px solid rgba(255,0,0,0.2); color:#ff4444; padding:10px; border-radius:10px; margin-bottom:15px; font-size:14px; text-align:center;"></div>
+
+            <div class="champ">
+                <label>Adresse email</label>
+                <input type="email" id="email" placeholder="exemple@mail.com">
+                <span class="erreur" id="errEmail"></span>
+            </div>
+
+            <div class="champ">
+                <label>Mot de passe</label>
+                <input type="password" id="motDePasse" placeholder="Votre mot de passe">
+                <span class="erreur" id="errMDP"></span>
+            </div>
+
+            <button class="btn-bleu btn-form" onclick="seConnecter()">Se connecter</button>
+
+            <p class="form-lien">Pas de compte ? <a href="inscription.html">Créer un compte</a></p>
+            <p style="font-size:12px; color:rgba(255,255,255,0.3); margin-top:10px; text-align:center;">
+                Compte démo : admin@yantechstore.dz / Admin123!
+            </p>
+        </div>
+    </div>
+
+    <script src="../javascript/produits.js"></script>
+    <script src="../javascript/auth.js"></script>
+    <script src="../javascript/panier.js"></script>
+    <script src="../javascript/particles.js"></script>
+    <script>
+        window.onload = function() {
+            majCompteurPanier();
+        };
+
+        var regexEmail = /^[a-zA-Z0-9._\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+
+        function seConnecter() {
+            var email = document.getElementById("email").value;
+            var mdp   = document.getElementById("motDePasse").value;
+            var ok    = true;
+
+            document.getElementById("errEmail").textContent = "";
+            document.getElementById("errMDP").textContent   = "";
+
+            if (email == "") {
+                document.getElementById("errEmail").textContent = "Email obligatoire.";
+                ok = false;
+            } else if (!regexEmail.test(email)) {
+                document.getElementById("errEmail").textContent = "Format email invalide.";
+                ok = false;
+            }
+
+            if (mdp == "") {
+                document.getElementById("errMDP").textContent = "Mot de passe obligatoire.";
+                ok = false;
+            }
+
+            if (ok == false) return;
+
+            var succes = connecter(email, mdp);
+            if (succes) {
+                window.location.href = "../index.html";
+            } else {
+                var msg = document.getElementById("messageErreur");
+                msg.textContent = "Email ou mot de passe incorrect.";
+                msg.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YanTechStore - Commande</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="../style/formulaires.css">
+    <link rel="stylesheet" href="../style/commande.css">
+</head>
+<body>
+    <nav>
+        <a href="../index.html" class="logo-img-link">
+            <img src="../images/logo-yantechstore.png" alt="YanTechStore" class="logo-img">
+        </a>
+        <button class="menu-toggle" onclick="document.getElementById('menuNav').classList.toggle('ouvert')">
+            <span></span><span></span><span></span>
+        </button>
+        <ul id="menuNav">
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="produits.html">Produits</a></li>
+            <li><a href="commande.html" class="actif">Commande</a></li>
+            <li><a href="panier.html" class="panier-btn">🛒 Panier <span id="compteurPanier">0</span></a></li>
+            <li><span id="nomUser"></span></li>
+            <li><a href="connexion.html" id="lienConnexion">Connexion</a></li>
+            <li><button onclick="deconnecter()" id="lienDeconnexion">Déconnexion</button></li>
+        </ul>
+    </nav>
+<!-- ====== LIGNE NÉON DÉFILANTE ====== -->
+    <div class="neon-line"></div>
+    <div class="contenu">
+        <h1 class="titre-page">📦 Passer une commande</h1>
+
+        <!-- confirmation cachée au début -->
+        <div id="confirmation" class="confirmation-box" style="display:none;">
+            <div class="confirm-icone">✅</div>
+            <h2>Commande confirmée !</h2>
+            <p>Merci pour votre commande. Vous serez livré(e) sous 48h.</p>
+            <div class="confirm-details">
+                <p><strong>N° de commande :</strong> <span id="confNumero"></span></p>
+                <p><strong>Total :</strong> <span id="confTotal"></span></p>
+                <p><strong>Adresse :</strong> <span id="confAdresse"></span></p>
+            </div>
+            <a href="produits.html" class="btn-bleu" style="display:inline-block; margin-top:20px;">Continuer mes achats</a>
+        </div>
+
+        <div class="commande-layout" id="layoutCommande">
+            <div class="form-livraison">
+                <h2>📍 Informations de livraison</h2>
+
+                <div class="champ-row">
+                    <div class="champ">
+                        <label>Prénom *</label>
+                        <input type="text" id="cmdPrenom">
+                        <span class="erreur" id="errCmdPrenom"></span>
+                    </div>
+                    <div class="champ">
+                        <label>Nom *</label>
+                        <input type="text" id="cmdNom">
+                        <span class="erreur" id="errCmdNom"></span>
+                    </div>
+                </div>
+
+                <div class="champ">
+                    <label>Téléphone *</label>
+                    <input type="tel" id="cmdTel">
+                    <span class="erreur" id="errCmdTel"></span>
+                </div>
+
+                <div class="champ">
+                    <label>Adresse complète *</label>
+                    <input type="text" id="cmdAdresse">
+                    <span class="erreur" id="errCmdAdresse"></span>
+                </div>
+
+                <div class="champ-row">
+                    <div class="champ">
+                        <label>Wilaya *</label>
+                        <select id="cmdWilaya">
+                            <option value="">-- Choisir --</option>
+                            <option>Alger</option><option>Oran</option><option>Constantine</option>
+                            <option>Annaba</option><option>Blida</option><option>Batna</option>
+                            <option>Sétif</option><option>Tizi Ouzou</option><option>Béjaïa</option>
+                            <option>Tlemcen</option><option>Boumerdès</option><option>Tipaza</option>
+                            <option>Médéa</option><option>Chlef</option><option>Mostaganem</option>
+                            <option>Skikda</option><option>Ouargla</option><option>El Oued</option>
+                            <option>Ghardaïa</option><option>Laghouat</option><option>Mascara</option>
+                            <option>Relizane</option><option>Tiaret</option><option>Djelfa</option>
+                            <option>Bordj Bou Arréridj</option><option>Mila</option><option>Aïn Defla</option>
+                            <option>Khenchela</option><option>Souk Ahras</option><option>Tébessa</option>
+                            <option>Béchar</option><option>Adrar</option><option>Tamanrasset</option>
+                            <option>Illizi</option><option>Naâma</option><option>El Bayadh</option>
+                            <option>Tissemsilt</option><option>El Tarf</option><option>Saïda</option>
+                            <option>Guelma</option><option>Jijel</option><option>Aïn Témouchent</option>
+                        </select>
+                        <span class="erreur" id="errCmdWilaya"></span>
+                    </div>
+                    <div class="champ">
+                        <label>Code postal</label>
+                        <input type="text" id="cmdCode" maxlength="5">
+                    </div>
+                </div>
+
+                <div class="champ">
+                    <label>Mode de paiement *</label>
+                    <div class="options-paiement">
+                        <label class="option-paiement">
+                            <input type="radio" name="paiement" value="livraison" checked> 💵 Paiement à la livraison
+                        </label>
+                        <label class="option-paiement">
+                            <input type="radio" name="paiement" value="ccp"> 🏦 Virement CCP
+                        </label>
+                    </div>
+                </div>
+
+                <button class="btn-bleu btn-form" onclick="confirmerCommande()">✅ Confirmer la commande</button>
+            </div>
+
+            <div class="recap-commande">
+                <h2>🧾 Récapitulatif</h2>
+                <div id="recapItems"></div>
+                <div class="recap-totaux">
+                    <div class="total-ligne"><span>Sous-total :</span><span id="recapSousTotal">0 DZD</span></div>
+                    <div class="total-ligne"><span>Livraison :</span><span id="recapLivraison">500 DZD</span></div>
+                    <div class="total-ligne total-final"><span>Total :</span><span id="recapTotal">500 DZD</span></div>
+                </div>
+                <p style="font-size:12px; color:#39ff14; text-align:center; margin-top:8px;">
+                    🎉 Livraison gratuite dès 10 000 DZD
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 YanTechStore — Tous droits réservés</p>
+    </footer>
+
+    <script src="../javascript/produits.js"></script>
+    <script src="../javascript/auth.js"></script>
+    <script src="../javascript/panier.js"></script>
+    <script src="../javascript/particles.js"></script>
+    <script>
+        var regexNom  = /^[A-Za-zÀ-ÿ\s'\-]{2,50}$/;
+        var regexTel  = /^(05|06|07)[0-9]{8}$/;
+
+        window.onload = function() {
+            majMenu();
+            majCompteurPanier();
+            afficherRecap();
+        };
+
+        function afficherRecap() {
+            var panier = JSON.parse(localStorage.getItem("panier")) || [];
+            var recap  = document.getElementById("recapItems");
+            var html   = "";
+            for (var i = 0; i < panier.length; i++) {
+                html += '<div class="recap-article">';
+                html += '<img src="' + panier[i].image + '" alt="' + panier[i].nom + '">';
+                html += '<div>';
+                html += '<p class="recap-nom">' + panier[i].nom + ' × ' + panier[i].quantite + '</p>';
+                html += '<p class="recap-prix">' + (panier[i].prix * panier[i].quantite).toLocaleString('fr-FR') + ' DZD</p>';
+                html += '</div></div>';
+            }
+            recap.innerHTML = html || '<p style="color:rgba(255,255,255,0.3);font-size:14px;">Panier vide.</p>';
+
+            var sous      = getTotal();
+            var livraison = sous >= 10000 ? 0 : 500;
+            document.getElementById("recapSousTotal").textContent = sous.toLocaleString('fr-FR') + " DZD";
+            document.getElementById("recapLivraison").textContent = livraison == 0 ? "Gratuit" : "500 DZD";
+            document.getElementById("recapTotal").textContent     = (sous + livraison).toLocaleString('fr-FR') + " DZD";
+        }
+
+        function confirmerCommande() {
+            var prenom  = document.getElementById("cmdPrenom").value;
+            var nom     = document.getElementById("cmdNom").value;
+            var tel     = document.getElementById("cmdTel").value;
+            var adresse = document.getElementById("cmdAdresse").value;
+            var wilaya  = document.getElementById("cmdWilaya").value;
+            var ok      = true;
+
+            document.getElementById("errCmdPrenom").textContent  = "";
+            document.getElementById("errCmdNom").textContent     = "";
+            document.getElementById("errCmdTel").textContent     = "";
+            document.getElementById("errCmdAdresse").textContent = "";
+            document.getElementById("errCmdWilaya").textContent  = "";
+
+            if (!regexNom.test(prenom)) {
+                document.getElementById("errCmdPrenom").textContent = "Prénom invalide (2-50 lettres).";
+                ok = false;
+            }
+            if (!regexNom.test(nom)) {
+                document.getElementById("errCmdNom").textContent = "Nom invalide (2-50 lettres).";
+                ok = false;
+            }
+            if (!regexTel.test(tel)) {
+                document.getElementById("errCmdTel").textContent = "Téléphone invalide (05/06/07 suivi de 8 chiffres).";
+                ok = false;
+            }
+            if (adresse.length < 10) {
+                document.getElementById("errCmdAdresse").textContent = "Adresse trop courte (min 10 caractères).";
+                ok = false;
+            }
+            if (wilaya == "") {
+                document.getElementById("errCmdWilaya").textContent = "Veuillez sélectionner une wilaya.";
+                ok = false;
+            }
+            if (!ok) return;
+
+            if (getTotal() == 0) {
+                alert("Votre panier est vide !");
+                return;
+            }
+
+            var numero = "TS-" + Date.now().toString().slice(-6);
+            var total  = (getTotal() + (getTotal() >= 10000 ? 0 : 500)).toLocaleString('fr-FR') + " DZD";
+
+            document.getElementById("layoutCommande").style.display = "none";
+            document.getElementById("confirmation").style.display   = "block";
+            document.getElementById("confNumero").textContent  = numero;
+            document.getElementById("confTotal").textContent   = total;
+            document.getElementById("confAdresse").textContent = adresse + ", " + wilaya;
+
+            localStorage.removeItem("panier");
+            majCompteurPanier();
+        }
+    </script>
+</body>
+</html>
